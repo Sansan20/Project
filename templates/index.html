@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f4ff;
+            color: #4a148c;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4a148c;
+        }
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        form input, form select, form button {
+            padding: 10px;
+            font-size: 14px;
+        }
+        form input {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+        }
+        form button {
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+         .pizza-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Уменьшение промежутков между карточками */
+            justify-content: space-between;
+        }
+
+        .pizza-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px; /* Уменьшение внутреннего отступа */
+            width: calc(20% - 10px); /* Карточка занимает 20% ширины, что позволяет разместить 5 карточек в ряд */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .pizza-card img {
+            max-width: 100%;
+            max-height: 150px;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+        }
+
+
+        .pizza-card h3 {
+            font-size: 16px; /* Уменьшение размера шрифта */
+            margin: 10px 0;
+            color: #6a1b9a;
+        }
+
+        .pizza-card p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .pizza-card span {
+            font-weight: bold;
+            color: #4a148c;
+        }
+        header {
+            background-color: #4a148c; /* Темный фиолетовый */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+        }
+
+        header h1 .highlight {
+            color: #ffcc00; /* Желтый цвет для выделения */
+        }
+
+        header p {
+            margin: 5px 0 0;
+            font-size: 20px;
+            font-weight: lighter;
+            color: #ffcc00; /* Желтый текст */
+        }
+        .reset-button {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 14px;
+            color: white;
+            background-color: #e53935; /* Красный цвет для кнопки */
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            margin-left: 10px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .reset-button:hover {
+            background-color: #b71c1c; /* Более темный оттенок при наведении */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            <span class="highlight">Сытый батыр</span>
+        </h1>
+        <p>Меню</p>
+    </header>
+
+    <main>
+        <form method="get">
+            <select name="order_dir">
+                <option value="asc" {% if order_dir == "asc" %}selected{% endif %}>По возрастанию</option>
+                <option value="desc" {% if order_dir == "desc" %}selected{% endif %}>По убыванию</option>
+            </select>
+            <input type="text" name="price_min" placeholder="Минимальная цена" value="{{ price_min if price_min else '' }}">
+            <input type="text" name="price_max" placeholder="Максимальная цена" value="{{ price_max if price_max else '' }}">
+            <button type="submit">Применить</button>
+            <a href="/" class="reset-button">Сбросить фильтры</a>
+        </form>
+
+        <!-- Сетка с пиццами -->
+        <div class="pizza-grid">
+            {% for pizza in pizzas %}
+            <div class="pizza-card">
+                {% if pizza['url_img'] %}
+                    <img src="{{ pizza['url_img'] }}" alt="{{ pizza['name'] }}">
+                {% else %}
+                    <img src="default-image.png" alt="Нет изображения">
+                {% endif %}
+                <h3>{{ pizza['name'] }}</h3>
+                <p>
+                    {% if pizza['price'] %}
+                        {% if "Комбо" in pizza['name'] %}
+                            От <span>{{ pizza['price'] }} ₽</span>
+                        {% else %}
+                            <span>{{ pizza['price'] }} ₽</span>
+                        {% endif %}
+                    {% else %}
+                        Не указано
+                    {% endif %}
+                </p>
+                <p>{{ pizza['weight'] if pizza['weight'] else " " }}</p>
+                <p>{{ pizza['ingredients'] if pizza['ingredients'] else " " }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
