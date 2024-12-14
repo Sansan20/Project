@@ -1,13 +1,22 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
+  parser:
+    build: .
     volumes:
       - .:/app
-    stdin_open: true
-    tty: true
+      - ./pizzas.db:/app/pizzas.db
+    command: python parse.py
+    restart: "no"
+
+  pizza_app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - .:/app
+      - ./pizzas.db:/app/pizzas.db
+    command: python app.py
+    restart: always

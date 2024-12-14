@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Сборка образа
 docker-compose build
-
-# Запуск контейнеров
+docker-compose up parser
+docker-compose up pizza_app
 docker-compose up
 
