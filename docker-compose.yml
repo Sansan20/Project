@@ -1,7 +1,8 @@
-version: "3.9"
 services:
   parser:
-    build: .
+    build:
+      context: ./app
+      dockerfile: Dockerfile
     volumes:
       - ./app:/app
     working_dir: /app
@@ -9,7 +10,9 @@ services:
     restart: "no"
 
   pizza_app:
-    build: .
+    build:
+      context: ./app
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
