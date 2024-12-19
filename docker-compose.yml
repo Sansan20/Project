@@ -1,0 +1,26 @@
+services:
+  parser:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    command: python parse.py
+    restart: "no"
+
+  pizza_app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    depends_on:
+      - parser
+    command: python app.py
+    restart: always

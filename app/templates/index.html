@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <!-- Подключение CSS через url_for -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>
+            <span class="highlight">Сытый батыр</span>
+        </h1>
+        <p>Меню</p>
+    </header>
+
+    <main>
+        <form method="get">
+            <select name="order_dir">
+                <option value="asc" {% if order_dir == "asc" %}selected{% endif %}>По возрастанию</option>
+                <option value="desc" {% if order_dir == "desc" %}selected{% endif %}>По убыванию</option>
+            </select>
+            <input type="text" name="price_min" placeholder="Минимальная цена" value="{{ price_min if price_min else '' }}">
+            <input type="text" name="price_max" placeholder="Максимальная цена" value="{{ price_max if price_max else '' }}">
+            <button type="submit">Применить</button>
+            <a href="/" class="reset-button">Сбросить фильтры</a>
+        </form>
+
+        <div class="pizza-grid">
+            {% for pizza in pizzas %}
+            <div class="pizza-card">
+                {% if pizza['url_img'] %}
+                    <img src="{{ pizza['url_img'] }}" alt="{{ pizza['name'] }}">
+                {% else %}
+                    <img src="default-image.png" alt="Нет изображения">
+                {% endif %}
+                <h3>{{ pizza['name'] }}</h3>
+                <p>
+                    {% if pizza['price'] %}
+                        {% if "Комбо" in pizza['name'] %}
+                            От <span>{{ pizza['price'] }} ₽</span>
+                        {% else %}
+                            <span>{{ pizza['price'] }} ₽</span>
+                        {% endif %}
+                    {% else %}
+                        Не указано
+                    {% endif %}
+                </p>
+                <p>{{ pizza['weight'] if pizza['weight'] else " " }}</p>
+                <p>{{ pizza['ingredients'] if pizza['ingredients'] else " " }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
